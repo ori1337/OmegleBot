@@ -165,8 +165,16 @@ class OmegleBot:
     def get_events(self):
         url = OmegleBot.EVENTS_URL % self.server
         data = "id=%s" % self.id
-        r = requests.post(url, data, headers=headers, cookies=self.cookies)
-        return json.loads(r.content)
+        events = None
+        keep_trying = True
+        while keep_trying:
+            try:
+                r = requests.post(url, data, headers=headers, cookies=self.cookies)
+                events = json.loads(r.content)
+                keep_trying = False
+            except Exception as ex:
+                self.logger.error(ex.message)
+        return events
 
     def reconnect(self):
         print "Reconnecting..."
