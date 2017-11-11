@@ -9,7 +9,17 @@ Brighten a stranger's day! An Omegle bot that continuously posts cheesy pickup l
 ``pip install -r requirements.txt``
 
 # Usage
-``python OmegleBot.py``
+``` python
+from OmegleBot import OmegleBot
+
+def main():
+    topics = ["add", "your", "interests", "here"]
+    omegle_bot = OmegleBot(wpm=68, topics=topics, save_chat_logs=False)
+    omegle_bot.run()
+
+if __name__ == "__main__":
+    main()
+```
 
 ## Notes
 The bot will start out with a greeting message, and will then loop through a list of pickup lines and post one after each of the
