@@ -57,7 +57,7 @@ class OmegleBot:
 
     CHATS_FOLDER = "chats"
 
-    def __init__(self, wpm=42, topics=None, write_to_file=False, email_address="", email_password=""):
+    def __init__(self, wpm=42, topics=None, save_chat_logs=False, email_address="", email_password=""):
         logging.basicConfig(level=logging.INFO)
         self.server = ""
         self.cookies = None
@@ -75,9 +75,9 @@ class OmegleBot:
         self.response_queue = Queue.Queue()
         self.typing_thread = threading.Thread(target=self.get_next_message)
         self.logger = logging.getLogger("OmegleBot")
-        self.write_to_file = write_to_file
+        self.save_chat_logs = save_chat_logs
         self.file = None
-        if self.write_to_file:
+        if self.save_chat_logs:
             self.create_chats_folder()
         self.typing_thread.start()
 
@@ -122,7 +122,7 @@ class OmegleBot:
         self.process_forever()
 
     def start(self):
-        if self.write_to_file:
+        if self.save_chat_logs:
             self.close_file()
         print("Connecting to server...")
         self.server = self.get_server()
@@ -258,6 +258,8 @@ class OmegleBot:
             except Exception as ex:
                 self.logger.error(ex.message)
         print("You: %s" % msg)
+        if self.save_chat_logs:
+            self.write_message_to_file("You: %s" % msg)
 
     def disconnect(self):
         url = self.DISCONNECT_URL % self.server
@@ -333,8 +335,8 @@ class OmegleBot:
 
     def handle_gotMessage(self, msg):
         print("Stranger: %s" % msg)
-        if self.write_to_file:
-            self.write_message_to_file(msg)
+        if self.save_chat_logs:
+            self.write_message_to_file("Stranger: %s" % msg)
 
     @staticmethod
     def handle_commonLikes(likes):
