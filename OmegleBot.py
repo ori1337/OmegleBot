@@ -58,6 +58,7 @@ class OmegleBot:
     CHATS_FOLDER = "chats"
 
     def __init__(self, wpm=42, topics=None, write_to_file=False, email_address="", email_password=""):
+        logging.basicConfig(level=logging.INFO)
         self.server = ""
         self.cookies = None
         self.id = ""
